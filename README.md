@@ -12,6 +12,17 @@ secrets, no flaky network. Second, it makes room for the tests that actually
 matter here (state lifecycle, idempotency, header propagation), which a
 read-only API can't express. The service itself is kept small on purpose.
 
+## API docs
+
+The API is described by an OpenAPI spec ([`openapi.yaml`](openapi.yaml)), which
+is the single source of truth for the contract.
+
+- **Browse online:** https://sush-dev-git.github.io/ticketing-api-automation/
+  (rendered with Redoc, read-only — the mock service isn't deployed, so there's
+  no live backend to call).
+- **Run locally:** `npm start`, then open http://localhost:3000/docs for Swagger
+  UI, or http://localhost:3000/openapi.json for the raw spec.
+
 ## What's covered
 
 - **Schema validation.** Every response is checked against a JSON Schema with a
@@ -62,8 +73,13 @@ ticketing-api-automation/
 │   │   └── schemas.js        # JSON Schemas + ajv validation helper
 │   └── suites/
 │       └── events.test.js    # events read tests
+├── openapi.yaml              # OpenAPI spec (single source of truth)
+├── docs/
+│   └── index.html            # Redoc page published to GitHub Pages
 ├── jest.setup.js             # registers the toMatchSchema matcher
-└── .github/workflows/ci.yml
+└── .github/workflows/
+    ├── ci.yml                # runs the test suite
+    └── pages.yml             # publishes the docs to GitHub Pages
 ```
 
 ## License
