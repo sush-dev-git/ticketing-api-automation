@@ -1,6 +1,16 @@
+const fs = require('fs');
+const path = require('path');
 const express = require('express');
+const YAML = require('yaml');
+const swaggerUi = require('swagger-ui-express');
 const { createStore } = require('./store');
 const eventsRouter = require('./routes/events');
+
+// Load the OpenAPI spec once at startup. It is the single source of truth for
+// the API contract and is also published as static docs (GitHub Pages).
+const openapiDoc = YAML.parse(
+  fs.readFileSync(path.join(__dirname, '..', 'openapi.yaml'), 'utf8')
+);
 
 /**
  * Builds an Express app wired to a store instance.
@@ -18,6 +28,10 @@ function createApp(store = createStore()) {
   app.locals.store = store;
 
   app.get('/health', (req, res) => res.json({ status: 'ok' }));
+
+  // Interactive API docs (Swagger UI) and the raw spec as JSON.
+  app.get('/openapi.json', (req, res) => res.json(openapiDoc));
+  app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapiDoc));
 
   app.use('/events', eventsRouter);
 

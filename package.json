@@ -22,7 +22,9 @@
     "node": ">=18"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "swagger-ui-express": "^5.0.1",
+    "yaml": "^2.5.1"
   },
   "devDependencies": {
     "ajv": "^8.17.1",
